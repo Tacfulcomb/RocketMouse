@@ -65,6 +65,14 @@ public class GeneratorScript : MonoBehaviour
         float farthestRoomEndX = 0;
         foreach (var room in currentRooms)
         {
+            // --- ADDED FIX FOR ROOMS ---
+            // Check if a room was destroyed by some other script
+            if (room == null)
+            {
+                roomsToRemove.Add(room);
+                continue;
+            }
+
             //7
             float roomWidth = room.transform.Find("Colliders/floor").localScale.x;
             float roomStartX = room.transform.position.x - (roomWidth * 0.5f);
@@ -121,8 +129,17 @@ public class GeneratorScript : MonoBehaviour
         List<GameObject> objectsToRemove = new List<GameObject>();
         foreach (var obj in objects)
         {
+            // --- THIS IS THE FIX ---
+            // Check if the object is null (was destroyed by something else)
+            if (obj == null)
+            {
+                objectsToRemove.Add(obj);
+                continue; // Skip the rest of the code for this loop iteration
+            }
+            // --- END OF FIX ---
+
             //3
-            float objX = obj.transform.position.x;
+            float objX = obj.transform.position.x; // This line (125) is now safe
             //4
             farthestObjectX = Mathf.Max(farthestObjectX, objX);
             //5

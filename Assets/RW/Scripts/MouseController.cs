@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MouseController : MonoBehaviour
 {
+    public GameObject restartDialog; 
+    public Text coinsLabel;
     public ParallaxScroll parallax;
     public AudioSource jetpackAudio;
     public AudioSource footstepsAudio;
@@ -32,6 +34,7 @@ public class MouseController : MonoBehaviour
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         mouseAnimator = GetComponent<Animator>();
+        restartDialog.SetActive(false);
     }
 
     // Update is called once per frame
@@ -92,6 +95,7 @@ public class MouseController : MonoBehaviour
         coinsCollectedLabel.text = coins.ToString();
         Destroy(coinCollider.gameObject);
         AudioSource.PlayClipAtPoint(coinCollectSound, transform.position);
+        coinsLabel.text = coins.ToString();
     }
     void AdjustFootstepsAndJetpackSound(bool jetpackActive)
     {
@@ -107,10 +111,10 @@ public class MouseController : MonoBehaviour
         }
     }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene("RocketMouse");
-    }
+    // public void RestartGame()
+    // {
+    //     SceneManager.LoadScene("RocketMouse");
+    // }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -134,6 +138,16 @@ public class MouseController : MonoBehaviour
 
         isDead = true;
         mouseAnimator.SetBool("isDead", true);
+        restartDialog.SetActive(true);
+    }
+    public void RestartGame() 
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ExitToMenu() 
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 
 }
